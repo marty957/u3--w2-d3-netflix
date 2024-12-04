@@ -42,7 +42,7 @@ const SingleRow = ({ title }) => {
 
         {movies.slice(0, 6).map((movie) => (
           <Col sm={12} md={4} lg={2} key={`movie${movie.imdbID}`} className="mb-2 text-center px-1">
-            <Link to={"/movie-details" + movie.imdbID}>
+            <Link to={"/movie-details/" + movie.imdbID}>
               <Image src={movie.Poster} alt="poster" className="img-fluid" />
             </Link>
           </Col>

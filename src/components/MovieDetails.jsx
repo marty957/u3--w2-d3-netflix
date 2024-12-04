@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import { Container, Row, Col, Card } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 
 const MovieDetails = () => {
   const [movie, setMovie] = useState({});
+  const [review, setReview] = useState({});
   const Params = useParams();
   console.log(Params);
 
@@ -23,8 +24,30 @@ const MovieDetails = () => {
         console.log(err);
       });
   };
+
+  const fetchComment = () => {
+    fetch("https://striveschool-api.herokuapp.com/api/comments/" + Params.imdbID, {
+      headers: {
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzM3MGI5YzhhZDEyOTAwMTU4NzZiYzQiLCJpYXQiOjE3MzMzMjg5OTcsImV4cCI6MTczNDUzODU5N30.PmLzPt1hv_zJJOuBhh9z7KJmK1XanSvGNttSmEAvyKs"
+      }
+    })
+      .then((resp) => {
+        if (resp.ok) {
+          return resp.json();
+        }
+      })
+      .then((comments) => {
+        console.log(comments);
+        setReview(comments);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   useEffect(() => {
     fecthSingleMovie();
+    fetchComment();
   }, []);
 
   return (
@@ -36,7 +59,7 @@ const MovieDetails = () => {
             <Card.Body>
               <Card.Title>{movie.Title}</Card.Title>
 
-              <Button variant="primary">Go somewhere</Button>
+              {review ? <Card.Body>{review.comment}</Card.Body> : ""}
             </Card.Body>
           </Card>
         </Col>
